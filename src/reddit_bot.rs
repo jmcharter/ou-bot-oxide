@@ -1,17 +1,22 @@
 use color_eyre::Result;
 use roux::{Reddit, Subreddit};
 
-pub async fn do_client() -> Result<roux::Me, roux::util::RouxError> {
-    let client = Reddit::new()
-        .username("OUHelperBot")
-        .password("")
+pub async fn get_client(
+    user_agent: &str,
+    client_id: &str,
+    client_secret: &str,
+    username: &str,
+    password: &str,
+) -> Result<roux::Me, roux::util::RouxError> {
+    Reddit::new(user_agent, client_id, client_secret)
+        .username(username)
+        .password(password)
         .login()
-        .await;
-    client
+        .await
 }
 
-pub async fn read_sub(sub: String) {
-    let sub = Subreddit::new(&sub);
+pub async fn read_sub(sub: &str) {
+    let sub = Subreddit::new(sub);
     let hot = sub.hot(25, None).await;
     dbg!(hot.unwrap());
 }
